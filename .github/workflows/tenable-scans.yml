@@ -5,7 +5,8 @@ on:
       - main
   pull_request:
 jobs:
-  tenablescan:
+  overviewscan:
+    environment: Tenable
     name: was-cicd
     runs-on: ubuntu-latest
     steps:
