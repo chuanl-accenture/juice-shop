@@ -1,4 +1,4 @@
-name: Overview Scan
+name: Tenable Scans
 on:
   push:
     branches:
