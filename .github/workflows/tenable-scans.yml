@@ -1,0 +1,24 @@
+name: Overview Scan
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  tenablescan:
+    name: was-cicd
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v2
+      - name: Build + Run JuiceShop
+        run: |
+          docker compose -f docker-compose.test.yml up
+      - name: Run WAS
+        run: |
+          docker pull tenable/was-scanner:latest
+          docker run -v $(pwd):/scanner -t -e WAS_MODE=cicd -e ACCESS_KEY=${TENABLE_ACCESS_KEY} -e SECRET_KEY=${TENABLE_SECRET_KEY} --link petstore tenable/was-scanner:latest || true
+          ls $(pwd)
+        env:
+          ACCESS_KEY: ${{ secrets.TENABLE_ACCESS_KEY }}
+          SECRET_KEY: ${{ secrets.TENABLE_SECRET_KEY }}
